@@ -22,7 +22,12 @@ socket.on('task', (data) => {
     command,
     source,
     cwd: execSync('pwd', { cwd: cwd[source] }).toString().trim(),
-    time: new Date().toLocaleTimeString()
+    time: new Date().toLocaleTimeString([], {
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: false
+    })
   }
   if (command === '') {
     socket.emit('task_result', {
@@ -54,6 +59,7 @@ socket.on('task', (data) => {
         } else {
           cwd[source] += `/${cmd[1]}`
         }
+        payload.cwd = execSync('pwd', { cwd: cwd[source] }).toString().trim()
       }
     }
     socket.emit('task_result', {
