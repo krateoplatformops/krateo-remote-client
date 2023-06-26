@@ -17,15 +17,21 @@ socket.on('task', (data) => {
   if (!cwd[source]) {
     cwd[source] = '/'
   }
-
   logger.info(`> task from ${source} - ${command}`)
+  const payload = {
+    command,
+    source,
+    cwd: execSync('pwd', { cwd: cwd[source] }).toString().trim(),
+    time: new Date().toLocaleTimeString()
+  }
+  if (command === '') {
+    socket.emit('task_result', {
+      ...payload,
+      output: ''
+    })
+    return
+  }
   exec(command, { cwd: cwd[source] }, (error, stdout, stderr) => {
-    const payload = {
-      command,
-      source,
-      cwd: execSync('pwd', { cwd: cwd[source] }).toString().trim(),
-      time: new Date().toLocaleTimeString()
-    }
     if (error) {
       logger.error(`error: ${error.message}`)
       socket.emit('task_result', {
