@@ -12,8 +12,18 @@ socket.on('connect', () => {
   socket.emit('warmup', { nodeId: me })
 })
 
+socket.on('error', (error) => {
+  logger.error(error)
+})
+
 socket.on('task', (data) => {
   const { source, command } = data
+  let cwp = command
+
+  if (process.env.COMMAND_PREFIX) {
+    cwp = `${process.env.COMMAND_PREFIX} "${command}"`
+  }
+
   if (!cwd[source]) {
     cwd[source] = '/'
   }
@@ -36,7 +46,7 @@ socket.on('task', (data) => {
     })
     return
   }
-  exec(command, { cwd: cwd[source] }, (error, stdout, stderr) => {
+  exec(cwp, { cwd: cwd[source] }, (error, stdout, stderr) => {
     if (error) {
       logger.error(`error: ${error.message}`)
       socket.emit('task_result', {
