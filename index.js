@@ -33,12 +33,14 @@ socket.on('task', (data) => {
   }
   if (process.env.PATH_PREFIX) {
     cwp += path.join(process.env.PATH_PREFIX, cwd[source])
+    cwd[source] = path.join(process.env.PATH_PREFIX, cwd[source])
   }
   if (process.env.COMMAND_SUFFIX) {
     cwp += ` ${process.env.COMMAND_SUFFIX}`
   }
   cwp = `${cwp.trim()} "${command}"`
   logger.debug(cwp)
+  logger.debug(cwd[source])
 
   logger.info(`> task from ${source} - ${command}`)
   const payload = {
