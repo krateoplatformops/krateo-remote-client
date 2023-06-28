@@ -21,7 +21,9 @@ socket.on('task', (data) => {
   let cwp = command
 
   if (process.env.COMMAND_PREFIX) {
-    cwp = `${process.env.COMMAND_PREFIX} "${command}"`
+    cwp = `${process.env.COMMAND_PREFIX} "${cwd[source]}${
+      cwd[source].endsWith('/') ? '' : '/'
+    }${command}"`
   }
 
   if (!cwd[source]) {
