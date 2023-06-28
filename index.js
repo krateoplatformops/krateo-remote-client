@@ -22,18 +22,13 @@ socket.on('task', (data) => {
   let cwp = ''
 
   if (!cwd[source]) {
-    if (process.env.PATH_PREFIX) {
-      cwd[source] = ''
-    } else {
-      cwd[source] = '/'
-    }
+    cwd[source] = '/'
   }
   if (process.env.COMMAND_PREFIX) {
     cwp = `${process.env.COMMAND_PREFIX} `
   }
   if (process.env.PATH_PREFIX) {
     cwp += path.join(process.env.PATH_PREFIX, cwd[source])
-    cwd[source] = path.join(process.env.PATH_PREFIX, cwd[source])
   }
   if (process.env.COMMAND_SUFFIX) {
     cwp += ` ${process.env.COMMAND_SUFFIX}`
