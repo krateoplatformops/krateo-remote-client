@@ -19,17 +19,26 @@ socket.on('error', (error) => {
 
 socket.on('task', (data) => {
   const { source, command } = data
-  let cwp = command
+  let cwp = ''
 
   if (!cwd[source]) {
-    cwd[source] = '/'
-  }
-  if (process.env.PATH_PREFIX) {
-    cwd[source] = path.join(process.env.PATH_PREFIX, cwd[source])
+    if (process.env.PATH_PREFIX) {
+      cwd[source] = ''
+    } else {
+      cwd[source] = '/'
+    }
   }
   if (process.env.COMMAND_PREFIX) {
-    cwp = `${process.env.COMMAND_PREFIX} "${command}"`
+    cwp = `${process.env.COMMAND_PREFIX} `
   }
+  if (process.env.PATH_PREFIX) {
+    cwp += path.join(process.env.PATH_PREFIX, cwd[source])
+  }
+  if (process.env.COMMAND_SUFFIX) {
+    cwp += ` ${process.env.COMMAND_SUFFIX}`
+  }
+  cwp = `${cwp.trim()} "${command}"`
+  logger.debug(cwp)
 
   logger.info(`> task from ${source} - ${command}`)
   const payload = {
