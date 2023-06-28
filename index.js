@@ -20,15 +20,15 @@ socket.on('task', (data) => {
   const { source, command } = data
   let cwp = command
 
+  if (!cwd[source]) {
+    cwd[source] = '/'
+  }
   if (process.env.COMMAND_PREFIX) {
     cwp = `${process.env.COMMAND_PREFIX} "${cwd[source]}${
       cwd[source].endsWith('/') ? '' : '/'
     }${command}"`
   }
 
-  if (!cwd[source]) {
-    cwd[source] = '/'
-  }
   logger.info(`> task from ${source} - ${command}`)
   const payload = {
     command,
