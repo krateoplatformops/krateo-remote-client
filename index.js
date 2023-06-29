@@ -1,8 +1,10 @@
-const logger = require('./helpers/logger.helpers')
-
+const express = require('express')
 const { io } = require('socket.io-client')
-const socket = io(process.env.REMOTE_HOST)
 const { exec, execSync } = require('child_process')
+
+const logger = require('./helpers/logger.helpers')
+const statusRoutes = require('./routes/status.routes')
+const socket = io(process.env.REMOTE_HOST)
 
 const me = process.env.NODE_ID
 const escalationChar = (process.env.ESCALATION_CHAR || '@')[0]
@@ -11,6 +13,10 @@ const cwd = []
 logger.info(`node name: ${me}`)
 logger.info(`remote host is: ${process.env.REMOTE_HOST}`)
 logger.info(`escalation char is: ${escalationChar}`)
+
+const app = express()
+app.use('/', statusRoutes)
+app.listen(process.env.PORT || 8080)
 
 socket.on('connect', () => {
   logger.info(`connected to ${process.env.REMOTE_HOST}`)
