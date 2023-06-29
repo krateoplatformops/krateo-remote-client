@@ -5,7 +5,12 @@ const socket = io(process.env.REMOTE_HOST)
 const { exec, execSync } = require('child_process')
 
 const me = process.env.NODE_ID
+const escalationChar = (process.env.ESCALATION_CHAR || '@')[0]
 const cwd = []
+
+logger.info(`node name: ${me}`)
+logger.info(`remote host is: ${process.env.REMOTE_HOST}`)
+logger.info(`escalation char is: ${escalationChar}`)
 
 socket.on('connect', () => {
   logger.info(`connected to ${process.env.REMOTE_HOST}`)
@@ -24,7 +29,7 @@ socket.on('task', (data) => {
     cwd[source] = '/'
   }
 
-  if (cwp[0] === '@' && process.env.COMMAND_PREFIX) {
+  if (cwp[0] === escalationChar && process.env.COMMAND_PREFIX) {
     cwp = `${process.env.COMMAND_PREFIX} "${cwp.slice(1)}"`.trim()
   }
   logger.debug(cwp)
