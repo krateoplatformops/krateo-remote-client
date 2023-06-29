@@ -3,7 +3,6 @@ const logger = require('./helpers/logger.helpers')
 const { io } = require('socket.io-client')
 const socket = io(process.env.REMOTE_HOST)
 const { exec, execSync } = require('child_process')
-const path = require('path')
 
 const me = process.env.NODE_ID
 const cwd = []
@@ -19,23 +18,16 @@ socket.on('error', (error) => {
 
 socket.on('task', (data) => {
   const { source, command } = data
-  let cwp = ''
+  let cwp = command
 
   if (!cwd[source]) {
     cwd[source] = '/'
   }
-  if (process.env.COMMAND_PREFIX) {
-    cwp = `${process.env.COMMAND_PREFIX} `
+
+  if (cwp[0] === '@' && process.env.COMMAND_PREFIX) {
+    cwp = `${process.env.COMMAND_PREFIX} ${cwp.slice(1)}`.trim()
   }
-  if (process.env.PATH_PREFIX) {
-    cwp += path.join(process.env.PATH_PREFIX, cwd[source])
-  }
-  if (process.env.COMMAND_SUFFIX) {
-    cwp += ` ${process.env.COMMAND_SUFFIX}`
-  }
-  cwp = `${cwp.trim()} "${command}"`
   logger.debug(cwp)
-  logger.debug(cwd[source])
 
   logger.info(`> task from ${source} - ${command}`)
   const payload = {
