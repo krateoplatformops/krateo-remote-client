@@ -18,14 +18,14 @@ socket.on('error', (error) => {
 
 socket.on('task', (data) => {
   const { source, command } = data
-  let cwp = command
+  let cwp = command.trim()
 
   if (!cwd[source]) {
     cwd[source] = '/'
   }
 
   if (cwp[0] === '@' && process.env.COMMAND_PREFIX) {
-    cwp = `${process.env.COMMAND_PREFIX} ${cwp.slice(1)}`.trim()
+    cwp = `${process.env.COMMAND_PREFIX} "${cwp.slice(1)}"`.trim()
   }
   logger.debug(cwp)
 
