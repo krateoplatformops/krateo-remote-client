@@ -60,12 +60,6 @@ podContainerPorts:
     containerPort: 8080
     protocol: TCP
 
-# put your env variables here
-podEnvFrom:
-  - configMapRef:
-      name: krateo-config
-  - secretRef:
-      name: krateo-secret
 
 podEnv:
   - name: LOG_LEVEL
