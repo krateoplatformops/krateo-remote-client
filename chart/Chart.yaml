@@ -1,6 +1,6 @@
 apiVersion: v2
-name: krateo-remote-server
-description: Krateo PlatformOps Remote Server
+name: krateo-remote-client
+description: Krateo PlatformOps Remote Client
 type: application
 icon: "https://github.com/krateoplatformops/community/blob/main/logos/black/icon.svg"
 
