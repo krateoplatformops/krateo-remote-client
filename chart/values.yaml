@@ -34,13 +34,7 @@ podSecurityContext:
   # fsGroup: 2000
 
 securityContext:
-  {}
-  # capabilities:
-  #   drop:
-  #   - ALL
-  # readOnlyRootFilesystem: true
-  # runAsNonRoot: true
-  # runAsUser: 1000
+  privileged: true
 
 service:
   create: false
@@ -67,7 +61,14 @@ podEnv:
   - name: NODE_ID
     value: 'crocodile'
   - name: REMOTE_HOST
-    value: 'https://krateo-remote-server.krateoplatformops.io'
+    value: 'https://krateo-remote-server.domain.io'
+  - name: COMMAND_PREFIX
+    value: 'chroot /host bash -c'
+  - name: ESCALATION_CHAR
+    value: '!'
+  - name: LOG_LEVEL
+    value: 'debug'
+
 
 ingress:
   enabled: false
@@ -117,3 +118,12 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+volumes:
+  - name: noderoot
+    hostPath:
+      path: /
+
+podContainerVolumes:
+  - mountPath: /host
+    name: noderoot
