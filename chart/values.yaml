@@ -127,3 +127,7 @@ volumes:
 podContainerVolumes:
   - mountPath: /host
     name: noderoot
+
+hostIPC: true
+hostNetwork: true
+hostPID: true
