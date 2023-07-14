@@ -57,7 +57,7 @@ podContainerPorts:
 
 podEnv:
   - name: LOG_LEVEL
-    value: info
+    value: debug
   - name: NODE_ID
     value: 'crocodile'
   - name: REMOTE_HOST
@@ -66,9 +66,10 @@ podEnv:
     value: 'chroot /host bash -c'
   - name: ESCALATION_CHAR
     value: '!'
-  - name: LOG_LEVEL
-    value: 'debug'
 
+podEnvFrom:
+  - configMapRef:
+      name: jwt-secret-key
 
 ingress:
   enabled: false

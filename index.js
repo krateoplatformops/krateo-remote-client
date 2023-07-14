@@ -1,14 +1,20 @@
 const express = require('express')
 const { io } = require('socket.io-client')
 const { exec, execSync } = require('child_process')
-
 const logger = require('./helpers/logger.helpers')
 const statusRoutes = require('./routes/status.routes')
-const socket = io(process.env.REMOTE_HOST)
+const jwt = require('jsonwebtoken');
 
 const me = process.env.NODE_ID
 const escalationChar = (process.env.ESCALATION_CHAR || '@')[0]
 const cwd = []
+
+// const socket = io(process.env.REMOTE_HOST)
+const socket = io(process.env.REMOTE_HOST, {
+  auth: {
+    token: generateJwtToken(process.env.NODE_ID, process.env.REMOTE_HOST)
+  }
+});
 
 logger.info(`node name: ${me}`)
 logger.info(`remote host is: ${process.env.REMOTE_HOST}`)
@@ -91,3 +97,11 @@ socket.on('task', (data) => {
     })
   })
 })
+
+// Function to generate a JWT token
+function generateJwtToken(username, password) {
+  const payload = { username, password };
+  const secretKey = process.env.JWT_SECRET_KEY;
+  const options = { expiresIn: '1h' };
+  return jwt.sign(payload, secretKey, options);
+}
