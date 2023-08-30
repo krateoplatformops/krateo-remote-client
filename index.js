@@ -9,12 +9,12 @@ const me = process.env.NODE_ID
 const escalationChar = (process.env.ESCALATION_CHAR || '@')[0]
 const cwd = []
 
-// const socket = io(process.env.REMOTE_HOST)
-const socket = io(process.env.REMOTE_HOST, {
-  auth: {
-    token: generateJwtToken(process.env.NODE_ID, process.env.REMOTE_HOST)
-  }
-});
+const socket = io(process.env.REMOTE_HOST)
+// const socket = io(process.env.REMOTE_HOST, {
+//   auth: {
+//     token: generateJwtToken(process.env.NODE_ID, process.env.REMOTE_HOST)
+//   }
+// });
 
 logger.info(`node name: ${me}`)
 logger.info(`remote host is: ${process.env.REMOTE_HOST}`)
@@ -41,9 +41,15 @@ socket.on('task', (data) => {
     cwd[source] = '/'
   }
 
+  logger.debug("cwp 1")
+  logger.debug(cwp)
+
+
   if (cwp[0] === escalationChar && process.env.COMMAND_PREFIX) {
     cwp = `${process.env.COMMAND_PREFIX} "${cwp.slice(1)}"`.trim()
   }
+
+  logger.debug("cwp 2")
   logger.debug(cwp)
 
   logger.info(`> task from ${source} - ${command}`)
@@ -99,9 +105,9 @@ socket.on('task', (data) => {
 })
 
 // Function to generate a JWT token
-function generateJwtToken(username, password) {
-  const payload = { username, password };
-  const secretKey = process.env.JWT_SECRET_KEY;
-  const options = { expiresIn: '1h' };
-  return jwt.sign(payload, secretKey, options);
-}
+// function generateJwtToken(username, password) {
+//   const payload = { username, password };
+//   const secretKey = process.env.JWT_SECRET_KEY;
+//   const options = { expiresIn: '1h' };
+//   return jwt.sign(payload, secretKey, options);
+// }
