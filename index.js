@@ -44,9 +44,13 @@ socket.on('task', (data) => {
   logger.debug("cwp 1")
   logger.debug(cwp)
 
-
-  if (cwp[0] === escalationChar && process.env.COMMAND_PREFIX) {
-    cwp = `${process.env.COMMAND_PREFIX} "${cwp.slice(1)}"`.trim()
+  if(!process.env.ESCALATION_BY_DEFAULT){
+    cwp = `${process.env.COMMAND_PREFIX}`.trim()
+  }
+  else {
+    if (cwp[0] === escalationChar && process.env.COMMAND_PREFIX) {
+      cwp = `${process.env.COMMAND_PREFIX} "${cwp.slice(1)}"`.trim()
+    }
   }
 
   logger.debug("cwp 2")

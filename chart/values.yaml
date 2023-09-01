@@ -66,6 +66,9 @@ podEnv:
     value: 'chroot /host bash -c'
   - name: ESCALATION_CHAR
     value: '!'
+  - name: ESCALATION_BY_DEFAULT
+    value: true
+
 
 podEnvFrom:
   - configMapRef:
