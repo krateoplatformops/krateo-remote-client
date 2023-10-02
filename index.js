@@ -41,24 +41,29 @@ socket.on('task', (data) => {
     cwd[source] = '/'
   }
 
-  logger.debug("cwp 1")
+  logger.debug("cwp 1 - START")
   logger.debug(cwp)
+  logger.debug("cwp 1 - END")
 
   if(process.env.ESCALATION_BY_DEFAULT){
     cwp = `${process.env.COMMAND_PREFIX} "${cwp}"`.trim()
 
-    logger.debug("cwp ESCALATION_BY_DEFAULT")
+    logger.debug("cwp ESCALATION_BY_DEFAULT=true - START")
     logger.debug(cwp)
-
+    logger.debug("cwp ESCALATION_BY_DEFAULT=true - END")
   }
   else {
     if (cwp[0] === escalationChar && process.env.COMMAND_PREFIX) {
+
+      logger.debug("cwp ESCALATION_BY_DEFAULT=false - START")
       cwp = `${process.env.COMMAND_PREFIX} "${cwp.slice(1)}"`.trim()
+      logger.debug("cwp ESCALATION_BY_DEFAULT=false - END")
     }
   }
 
-  logger.debug("cwp 2")
+  logger.debug("cwp 2 - START")
   logger.debug(cwp)
+  logger.debug("cwp 2 - END")
 
   logger.info(`> task from ${source} - ${command}`)
   const payload = {
@@ -72,6 +77,11 @@ socket.on('task', (data) => {
       hour12: false
     })
   }
+
+  logger.debug("payload.toString()- START")
+  logger.debug(payload.toString())
+  logger.debug("payload.toString() - END")
+
   if (command === '') {
     socket.emit('task_result', {
       ...payload,
