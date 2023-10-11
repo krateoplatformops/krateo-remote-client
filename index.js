@@ -78,9 +78,9 @@ socket.on('task', (data) => {
     })
   }
 
-  logger.debug("payload.toString()- START")
-  logger.debug(payload.toString())
-  logger.debug("payload.toString() - END")
+  logger.debug("payload - START")
+  logger.debug(payload)
+  logger.debug("payload - END")
 
   if (command === '') {
     socket.emit('task_result', {
